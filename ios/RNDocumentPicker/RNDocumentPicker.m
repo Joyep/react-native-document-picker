@@ -56,7 +56,20 @@ RCT_EXPORT_METHOD(pick:(NSDictionary *)options
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSArray *allowedUTIs = [RCTConvert NSArray:options[OPTION_TYPE]];
-    UIDocumentPickerViewController *documentPicker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:(NSArray *)allowedUTIs inMode:UIDocumentPickerModeImport];
+    NSString *modeString = options[@"mode"];
+    UIDocumentPickerMode pickerMode = UIDocumentPickerModeImport;
+    
+    if ([@"open" isEqualToString:modeString]) {
+        pickerMode = UIDocumentPickerModeOpen;
+    } else if ([@"import" isEqualToString:modeString]) {
+        pickerMode = UIDocumentPickerModeImport;
+    } else if ([@"export" isEqualToString:modeString]) {
+        pickerMode = UIDocumentPickerModeExportToService;
+    } else if ([@"move" isEqualToString:modeString]) {
+        pickerMode = UIDocumentPickerModeMoveToService;
+    }
+
+    UIDocumentPickerViewController *documentPicker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:(NSArray *)allowedUTIs inMode:pickerMode];
     
     [composeResolvers addObject:resolve];
     [composeRejecters addObject:reject];
@@ -96,6 +109,51 @@ RCT_EXPORT_METHOD(pick:(NSDictionary *)options
                 [result setValue:copyError.description forKey:FIELD_COPY_ERR];
             }
 
+            [result setValue:[newURL lastPathComponent] forKey:FIELD_NAME];
+            
+            NSError *attributesError = nil;
+            NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:newURL.path error:&attributesError];
+            if(!attributesError) {
+                [result setValue:[fileAttributes objectForKey:NSFileSize] forKey:FIELD_SIZE];
+            } else {
+                NSLog(@"%@", attributesError);
+            }
+            
+            if ( newURL.pathExtension != nil ) {
+                CFStringRef extension = (__bridge CFStringRef)[newURL pathExtension];
+                CFStringRef uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, extension, NULL);
+                CFStringRef mimeType = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType);
+                CFRelease(uti);
+                
+                NSString *mimeTypeString = (__bridge_transfer NSString *)mimeType;
+                [result setValue:mimeTypeString forKey:FIELD_TYPE];
+            }
+        }
+    }];
+    
+    [url stopAccessingSecurityScopedResource];
+    
+    if (fileError) {
+        *error = fileError;
+        return nil;
+    } else {
+        return result;
+    }
+}
+
+- (NSMutableDictionary *)getMetadataForOpenUrl:(NSURL *)url error:(NSError **)error
+{
+    __block NSMutableDictionary* result = [NSMutableDictionary dictionary];
+    
+    [url startAccessingSecurityScopedResource];
+    
+    NSFileCoordinator *coordinator = [[NSFileCoordinator alloc] init];
+    NSError *fileError;
+    
+    [coordinator coordinateReadingItemAtURL:url options:NSFileCoordinatorReadingResolvesSymbolicLink error:&fileError byAccessor:^(NSURL *newURL) {
+        if (!fileError) {
+            [result setValue:newURL.absoluteString forKey:FIELD_URI];
+            
             [result setValue:[newURL lastPathComponent] forKey:FIELD_NAME];
             
             NSError *attributesError = nil;
@@ -179,26 +237,32 @@ RCT_EXPORT_METHOD(pick:(NSDictionary *)options
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
 {
-    if (controller.documentPickerMode == UIDocumentPickerModeImport) {
-        RCTPromiseResolveBlock resolve = [composeResolvers lastObject];
-        RCTPromiseRejectBlock reject = [composeRejecters lastObject];
-        [composeResolvers removeLastObject];
-        [composeRejecters removeLastObject];
-        
-        NSMutableArray *results = [NSMutableArray array];
-        for (id url in urls) {
-            NSError *error;
-            NSMutableDictionary* result = [self getMetadataForUrl:url error:&error];
-            if (result) {
-                [results addObject:result];
-            } else {
-                reject(E_INVALID_DATA_RETURNED, error.localizedDescription, error);
-                return;
-            }
+    
+    RCTPromiseResolveBlock resolve = [composeResolvers lastObject];
+    RCTPromiseRejectBlock reject = [composeRejecters lastObject];
+    [composeResolvers removeLastObject];
+    [composeRejecters removeLastObject];
+    
+    NSMutableArray *results = [NSMutableArray array];
+    for (id url in urls) {
+        NSLog(@"picked URL = %@", url);
+        NSError *error;
+        NSMutableDictionary* result;
+        if (controller.documentPickerMode == UIDocumentPickerModeImport) {
+            result = [self getMetadataForUrl:url error:&error];
+        } else if(controller.documentPickerMode == UIDocumentPickerModeOpen) {
+            result = [self getMetadataForOpenUrl:url error:&error];
         }
-        
-        resolve(results);
+        if (result) {
+            [results addObject:result];
+        } else {
+            reject(E_INVALID_DATA_RETURNED, error.localizedDescription, error);
+            return;
+        }
     }
+    
+    resolve(results);
+
 }
 
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller
