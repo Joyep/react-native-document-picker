@@ -25,6 +25,7 @@ declare module 'react-native-document-picker' {
       xls: 'application/vnd.ms-excel';
       xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
       zip: 'application/zip';
+      kdbx: '*/*';
     };
     utis: {
       allFiles: 'public.item';
@@ -41,6 +42,7 @@ declare module 'react-native-document-picker' {
       xls: 'com.microsoft.excel.xls';
       xlsx: 'org.openxmlformats.spreadsheetml.sheet';
       zip: 'public.zip-archive';
+      kdbx: 'com.keybox.kdbx';
     };
     extensions: {
       allFiles: '*';
@@ -58,6 +60,7 @@ declare module 'react-native-document-picker' {
       xlsx: '.xlsx';
       zip: '.zip .gz';
       folder: 'folder';
+      kdbx: '*';
     };
   };
   type PlatformTypes = {
@@ -67,8 +70,9 @@ declare module 'react-native-document-picker' {
   };
   interface DocumentPickerOptions<OS extends keyof PlatformTypes> {
     type: Array<PlatformTypes[OS][keyof PlatformTypes[OS]]> | DocumentType[OS];
-    mode?: 'import' | 'open';
+    mode?: 'import' | 'open' | 'export' | 'move';
     copyTo?: 'cachesDirectory' | 'documentDirectory';
+    url?: string;
   }
   interface DocumentPickerResponse {
     uri: string;
@@ -77,6 +81,7 @@ declare module 'react-native-document-picker' {
     type: string;
     name: string;
     size: number;
+    bookmark?: string;
   }
   type Platform = 'ios' | 'android' | 'windows';
   export default class DocumentPicker<OS extends keyof PlatformTypes = Platform> {

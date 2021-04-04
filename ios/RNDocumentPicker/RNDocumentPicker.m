@@ -19,6 +19,7 @@ static NSString *const FIELD_COPY_ERR = @"copyError";
 static NSString *const FIELD_NAME = @"name";
 static NSString *const FIELD_TYPE = @"type";
 static NSString *const FIELD_SIZE = @"size";
+static NSString *const FIELD_BOOKMARK = @"bookmark";
 
 @interface RNDocumentPicker () <UIDocumentPickerDelegate>
 @end
@@ -107,14 +108,26 @@ RCT_EXPORT_METHOD(pick:(NSDictionary *)options
     [rootViewController presentViewController:documentPicker animated:YES completion:nil];
 }
 
+
+- (NSString *)hexStringFromData: (NSData*)data {
+    NSUInteger len = [data length];
+    char *chars = (char *)[data bytes];
+    NSMutableString *hexString = [[NSMutableString alloc]init];
+    for (NSUInteger i=0; i<len; i++) {
+        [hexString appendString:[NSString stringWithFormat:@"%0.2hhx",chars[i]]];
+    }
+    return hexString;
+}
+
+
 - (NSMutableDictionary *)getMetadataForUrl:(NSURL *)url error:(NSError **)error
 {
     __block NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
 	BOOL continueAccess = (mode == UIDocumentPickerModeOpen || mode == UIDocumentPickerModeExportToService || mode == UIDocumentPickerModeMoveToService);
-    
-    if (continueAccess)
-        [urls addObject:url];
+//
+//    if (continueAccess)
+//        [urls addObject:url];
     [url startAccessingSecurityScopedResource];
     
     NSFileCoordinator *coordinator = [NSFileCoordinator new];
@@ -153,7 +166,14 @@ RCT_EXPORT_METHOD(pick:(NSDictionary *)options
         }
     }];
     
-    if (!continueAccess)
+    if(continueAccess) {
+        // return bookmark for later access
+        NSData* bookmark = [url bookmarkDataWithOptions:(NSURLBookmarkCreationSuitableForBookmarkFile) includingResourceValuesForKeys:nil relativeToURL:nil error:nil ];
+        NSString* bookmarkString = [self hexStringFromData:bookmark];
+        [result setValue:bookmarkString forKey:FIELD_BOOKMARK];
+    }
+    
+//    if (!continueAccess)
         [url stopAccessingSecurityScopedResource];
     
     if (fileError) {
