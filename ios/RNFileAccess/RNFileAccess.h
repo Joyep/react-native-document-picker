@@ -2,6 +2,6 @@
 
 @import UIKit;
 
-@interface RNDocumentPicker : NSObject <RCTBridgeModule>
+@interface RNFileAccess : NSObject <RCTBridgeModule>
 
 @end

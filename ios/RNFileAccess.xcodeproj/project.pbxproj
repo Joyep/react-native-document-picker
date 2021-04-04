@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E01DD9DF1D2311A600C39062 /* RNDocumentPicker.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = E01DD9DE1D2311A600C39062 /* RNDocumentPicker.h */; };
-		E01DD9E11D2311A600C39062 /* RNDocumentPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E01DD9E01D2311A600C39062 /* RNDocumentPicker.m */; };
+		E01DD9DF1D2311A600C39062 /* RNFileAccess.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = E01DD9DE1D2311A600C39062 /* RNFileAccess.h */; };
+		E01DD9E11D2311A600C39062 /* RNFileAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = E01DD9E01D2311A600C39062 /* RNFileAccess.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,16 +18,16 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				E01DD9DF1D2311A600C39062 /* RNDocumentPicker.h in CopyFiles */,
+				E01DD9DF1D2311A600C39062 /* RNFileAccess.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E01DD9DB1D2311A600C39062 /* libRNDocumentPicker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNDocumentPicker.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		E01DD9DE1D2311A600C39062 /* RNDocumentPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNDocumentPicker.h; sourceTree = "<group>"; };
-		E01DD9E01D2311A600C39062 /* RNDocumentPicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNDocumentPicker.m; sourceTree = "<group>"; };
+		E01DD9DB1D2311A600C39062 /* libRNFileAccess.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNFileAccess.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E01DD9DE1D2311A600C39062 /* RNFileAccess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNFileAccess.h; sourceTree = "<group>"; };
+		E01DD9E01D2311A600C39062 /* RNFileAccess.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNFileAccess.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,7 +44,7 @@
 		E01DD9D21D2311A600C39062 = {
 			isa = PBXGroup;
 			children = (
-				E01DD9DD1D2311A600C39062 /* RNDocumentPicker */,
+				E01DD9DD1D2311A600C39062 /* RNFileAccess */,
 				E01DD9DC1D2311A600C39062 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -52,26 +52,26 @@
 		E01DD9DC1D2311A600C39062 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E01DD9DB1D2311A600C39062 /* libRNDocumentPicker.a */,
+				E01DD9DB1D2311A600C39062 /* libRNFileAccess.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E01DD9DD1D2311A600C39062 /* RNDocumentPicker */ = {
+		E01DD9DD1D2311A600C39062 /* RNFileAccess */ = {
 			isa = PBXGroup;
 			children = (
-				E01DD9DE1D2311A600C39062 /* RNDocumentPicker.h */,
-				E01DD9E01D2311A600C39062 /* RNDocumentPicker.m */,
+				E01DD9DE1D2311A600C39062 /* RNFileAccess.h */,
+				E01DD9E01D2311A600C39062 /* RNFileAccess.m */,
 			);
-			path = RNDocumentPicker;
+			path = RNFileAccess;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E01DD9DA1D2311A600C39062 /* RNDocumentPicker */ = {
+		E01DD9DA1D2311A600C39062 /* RNFileAccess */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E01DD9E41D2311A600C39062 /* Build configuration list for PBXNativeTarget "RNDocumentPicker" */;
+			buildConfigurationList = E01DD9E41D2311A600C39062 /* Build configuration list for PBXNativeTarget "RNFileAccess" */;
 			buildPhases = (
 				E01DD9D71D2311A600C39062 /* Sources */,
 				E01DD9D81D2311A600C39062 /* Frameworks */,
@@ -81,9 +81,9 @@
 			);
 			dependencies = (
 			);
-			name = RNDocumentPicker;
-			productName = RNDocumentPicker;
-			productReference = E01DD9DB1D2311A600C39062 /* libRNDocumentPicker.a */;
+			name = RNFileAccess;
+			productName = RNFileAccess;
+			productReference = E01DD9DB1D2311A600C39062 /* libRNFileAccess.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -100,7 +100,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E01DD9D61D2311A600C39062 /* Build configuration list for PBXProject "RNDocumentPicker" */;
+			buildConfigurationList = E01DD9D61D2311A600C39062 /* Build configuration list for PBXProject "RNFileAccess" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -113,7 +113,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E01DD9DA1D2311A600C39062 /* RNDocumentPicker */,
+				E01DD9DA1D2311A600C39062 /* RNFileAccess */,
 			);
 		};
 /* End PBXProject section */
@@ -123,7 +123,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E01DD9E11D2311A600C39062 /* RNDocumentPicker.m in Sources */,
+				E01DD9E11D2311A600C39062 /* RNFileAccess.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,7 +265,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E01DD9D61D2311A600C39062 /* Build configuration list for PBXProject "RNDocumentPicker" */ = {
+		E01DD9D61D2311A600C39062 /* Build configuration list for PBXProject "RNFileAccess" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E01DD9E21D2311A600C39062 /* Debug */,
@@ -274,7 +274,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E01DD9E41D2311A600C39062 /* Build configuration list for PBXNativeTarget "RNDocumentPicker" */ = {
+		E01DD9E41D2311A600C39062 /* Build configuration list for PBXNativeTarget "RNFileAccess" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E01DD9E51D2311A600C39062 /* Debug */,

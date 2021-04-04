@@ -1,4 +1,4 @@
-declare module 'react-native-document-picker' {
+declare module 'react-native-file-access' {
   type UTI = 'public.png' | 'public.jpeg' | 'com.adobe.pdf';
   type MimeType = 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/pdf';
   type Extension = '.jpeg' | '.jpg' | '.png' | '.txt' | '.pdf';
@@ -65,12 +65,11 @@ declare module 'react-native-document-picker' {
     ios: Types['utis'];
     windows: Types['extensions'];
   };
-  interface DocumentPickerOptions<OS extends keyof PlatformTypes> {
-    type: Array<PlatformTypes[OS][keyof PlatformTypes[OS]]> | DocumentType[OS];
-    mode?: 'import' | 'open';
-    copyTo?: 'cachesDirectory' | 'documentDirectory';
+  interface FileAccessOptions {
+    url: string,
+    data?: string,
   }
-  interface DocumentPickerResponse {
+  interface FileAccessResponse {
     uri: string;
     fileCopyUri: string;
     copyError?: string;
@@ -79,15 +78,8 @@ declare module 'react-native-document-picker' {
     size: number;
   }
   type Platform = 'ios' | 'android' | 'windows';
-  export default class DocumentPicker<OS extends keyof PlatformTypes = Platform> {
-    static types: PlatformTypes['ios'] | PlatformTypes['android'] | PlatformTypes['windows'];
-    static pick<OS extends keyof PlatformTypes = Platform>(
-      options: DocumentPickerOptions<OS>
-    ): Promise<DocumentPickerResponse>;
-    static pickMultiple<OS extends keyof PlatformTypes = Platform>(
-      options: DocumentPickerOptions<OS>
-    ): Promise<DocumentPickerResponse[]>;
-    static isCancel<IError extends { code?: string }>(err?: IError): boolean;
-    static releaseSecureAccess(uris: Array<string>): void;
+  export default class FileAccess {
+    static startAccess(opt: { url: string, bookmark?: string}): Promise<boolean>;
+    static stopAccess(opt: { url: string, bookmark?: string}): Promise<boolean>;
   }
 }
